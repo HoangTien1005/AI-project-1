@@ -2,7 +2,7 @@ import os
 from node import Node
 from bfs import BFS
 from dfs import DFS
-from greedy import Greedy
+from greedy import *
 from a_star import A_Star
 from utilities import *
 
@@ -24,9 +24,19 @@ if selection == 1:
 elif selection == 2:
     route = BFS(start, end)
 elif selection == 3:
-    route = A_Star(start, end)
+    print('1. Manhattan Distance Heuristic')
+    print('2. Euclidean Distance Heuristic')
+    type = None
+    while type != 1 and type != 2:
+        type = int(input())
+    route = A_Star(start, end, type)
 elif selection == 4:
-    route = Greedy(start, end)
+    print('1. Manhattan Distance Heuristic')
+    print('2. Euclidean Distance Heuristic')
+    type = None
+    while type != 1 and type != 2:
+        type = int(input())
+    route = Greedy(start, end, type)
 else: 
     exit()
 
