@@ -109,3 +109,6 @@ def init(maze, bonus_points = None):
         for j in range(1, len(graph[0]) - 1):
             graph[i][j].addNeighbors(graph)
     return graph, start, end
+
+def swapArrElement(arr, pos1, pos2):
+    arr[pos1], arr[pos2] = arr[pos2], arr[pos1]
