@@ -2,15 +2,15 @@ import matplotlib.pyplot as plt
 from node import Node
 
 
-def visualize(maze, bonus, start, end, route=None):
+def visualize(maze, bonus, start, end, route=None, cost=None):
     print(f'The height of the maze: {len(maze)}')
     print(f'The width of the maze: {len(maze[0])}')
 
     print(f'Starting point (x, y) = {start.x, start.y}')
     print(f'Ending point (x, y) = {end.x, end.y}')
 
-    if route:
-        print(f'Cost: {len(route)}')
+    if cost:
+        print(f'Cost: {cost}')
 
     for _, point in enumerate(bonus):
         print(

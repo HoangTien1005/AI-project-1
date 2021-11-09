@@ -1,5 +1,5 @@
 class Node:
-    def __init__(self, x, y, reward=0, f=0, g=0, h=0, neighbors=[], previous=None, isWall=False, isVisited=False):
+    def __init__(self, x, y, reward=0, f=0, g=0, h=0, neighbors=[], previous=[], isWall=False, isVisited=False):
         self.x = x
         self.y = y
         self.reward = reward
@@ -7,7 +7,7 @@ class Node:
         self.g = g
         self.h = h
         self.neighbors = neighbors[:]
-        self.previous = previous
+        self.previous = previous[:]
         self.isWall = isWall
         self.isVisited = isVisited
 

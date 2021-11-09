@@ -3,7 +3,7 @@ import math
 def getRoute(start, end):
     route = [end]
     while not route[-1].isEqual(start):
-        route.append(route[-1].previous)
+        route.append(route[-1].previous.pop())
     route.reverse()
     return route
 
@@ -40,38 +40,39 @@ def increasingSort(arr, end, type = 1): # Calculate the distance from each node 
                     swapArrElement(arr,i,j)
 
 
-def Greedy(start, end, type = 1, bonus_points = None):
+def Greedy(start, end, type = 1, bonus_points = []):
     PriorityQueue = []
     PriorityQueue.append(start)
     while PriorityQueue:
         node = PriorityQueue.pop(0)
         node.isVisited = True
         if node.isEqual(end):
-            return getRoute(start, end)
+            route = getRoute(start, end)
+            return route, len(route)
         
         increasingSort(node.neighbors, end, type)
 
         for neighbor in node.neighbors:
             if neighbor not in PriorityQueue and not neighbor.isVisited:
-                neighbor.previous = node
+                neighbor.previous.append(node)
                 PriorityQueue.append(neighbor)
 
 
 
-def Greedy2(start, end, bonus_points = None):
-    PriorityQueue = []
-    PriorityQueue.append(start)
-    while PriorityQueue:
-        increasingSort(PriorityQueue, end)
-        node = PriorityQueue.pop(0)
-        node.isVisited = True
-        if node.isEqual(end):
-            return getRoute(start, end)
+# def Greedy2(start, end, bonus_points = None):
+#     PriorityQueue = []
+#     PriorityQueue.append(start)
+#     while PriorityQueue:
+#         increasingSort(PriorityQueue, end)
+#         node = PriorityQueue.pop(0)
+#         node.isVisited = True
+#         if node.isEqual(end):
+#             return getRoute(start, end)
         
 
-        for neighbor in node.neighbors:
-            if neighbor not in PriorityQueue and not neighbor.isVisited:
-                neighbor.previous = node
-                PriorityQueue.append(neighbor)
+#         for neighbor in node.neighbors:
+#             if neighbor not in PriorityQueue and not neighbor.isVisited:
+#                 neighbor.previous = node
+#                 PriorityQueue.append(neighbor)
            
     
