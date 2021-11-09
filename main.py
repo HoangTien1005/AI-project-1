@@ -7,9 +7,9 @@ from a_star import A_Star
 from utilities import *
 
 
-bonus_points, maze = read_file('map7.txt')
+bonus_points, maze = read_file('map6.txt')
 
-graph, start, end = init(maze, bonus_points)
+graph, start, end, temp_bonus_points = init(maze, bonus_points)
 
 
 
@@ -30,7 +30,7 @@ elif selection == 3:
     while type != 1 and type != 2:
         type = int(input())
     tempbonus = bonus_points[:]
-    route, cost = A_Star(start, end, tempbonus, type)
+    route, cost = A_Star(graph, start, end, type, temp_bonus_points)
 elif selection == 4:
     print('1. Manhattan Distance Heuristic')
     print('2. Euclidean Distance Heuristic')
@@ -40,7 +40,6 @@ elif selection == 4:
     route, cost = Greedy(start, end, bonus_points, type)
 else: 
     exit()
-
 
 
 visualize(maze, bonus_points, start, end, route, cost)

@@ -3,13 +3,14 @@ import math
 def getRoute(start, end):
     route = [end]
     while not route[-1].isEqual(start):
-        route.append(route[-1].previous.pop())
+        route.append(route[-1].previous)
     route.reverse()
     return route
 
-def wayPaving(route):
-    for node in route:
-        node.isVisited = False
+def wayPaving(graph):
+    for i in range(len(graph)):
+        for j in range(len(graph[0])):
+            graph[i][j].g = 0
 
 
 def swapArrElement(arr, pos1, pos2):
@@ -30,14 +31,10 @@ def Heuristic(node, end, type = 1):
         node.h = Manhattan(node, end)
     elif type == 2:
         node.h = Euclidean(node, end)
+    return node.h
 
 
 def increasingSort(arr, end, type = 1):
-    for i in range(len(arr)):
-        Heuristic(arr[i], end, type)
-        arr[i].g = arr[i].previous.g + 1
-        arr[i].f = arr[i].g + arr[i].h
-
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
             if j < len(arr):
@@ -48,51 +45,50 @@ def bonus_iSort(arr, end, type = 1):
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
             if j < len(arr):
-                if type == 1:
-                    if Manhattan(arr[i], end) > Manhattan(arr[j], end):
-                        swapArrElement(arr,i,j) 
-                elif type == 2:
-                    if Euclidean(arr[i], end) > Euclidean(arr[j], end):
-                       swapArrElement(arr,i,j)   
+                if Heuristic(arr[i], end, type) > Heuristic(arr[j], end, type):
+                    swapArrElement(arr,i,j)   
 
-def A_Star(start, end, bonus_points = [], type=1):
+def A_Star(graph, start, end, type=1, bonus_points = []):
     if len(bonus_points) == 0:
         openList = []
-        closedList = []
+
         openList.append(start)
 
         while openList:
+            increasingSort(openList, end, type)
             node = openList.pop(0)
-            node.isVisited = True
-            closedList.append(node)
+            
             if node.isEqual(end):
+                end.previous = node.previous
                 route = getRoute(start, end)
                 return route, len(route)
 
             for neighbor in node.neighbors:
-                if neighbor in closedList:
-                    continue
-                if type == 1:              
-                    tempf = node.g + 1 + Manhattan(neighbor, end)
-                elif type == 2:
-                    tempf = node.g + 1 + Euclidean(neighbor, end)
-                if neighbor in openList and tempf >= openList[openList.index(neighbor)].f:
-                    continue
-                openList.append(neighbor)
-                neighbor.previous.append(node)
-
-        increasingSort(openList, end, type)
+                temp_g = node.g + 1
+                if temp_g < neighbor.g or neighbor.g == 0 and not neighbor.isEqual(start):
+                    neighbor.previous = node
+                    neighbor.g = temp_g
+                    neighbor.f = neighbor.g + Heuristic(neighbor, end, type)
+                    if neighbor not in openList:
+                        openList.append(neighbor)
 
     else:
-        cost = 0
-        for node in bonus_points:
-            cost += node.reward
         bonus_iSort(bonus_points, start, type)
-        node = bonus_points.pop(0)
-        
-        wayPaving(A_Star(start, node, [], type)[0])
-        A_Star(node, end, bonus_points, type)
-        route = getRoute(start, end)
-        return route, len(route) + cost    
+        route, cost = A_Star(graph, start, bonus_points[0], type)
+        cost += bonus_points[0].reward
+        wayPaving(graph)
+
+        for i in range(0, len(bonus_points) -1):
+            temp_route, route_length = A_Star(graph, bonus_points[i], bonus_points[i + 1], type)
+            wayPaving(graph)
+            route = route + temp_route
+            cost = cost + route_length
+            cost += bonus_points[i + 1].reward
+
+        last_route, last_route_length = A_Star(graph, bonus_points[-1], end, type)
+        route = route + last_route
+        cost = cost + last_route_length
+
+        return route, cost    
            
     

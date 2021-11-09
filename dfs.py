@@ -1,7 +1,7 @@
 def getRoute(start, end):
     route = [end]
     while not route[-1].isEqual(start):
-        route.append(route[-1].previous.pop())
+        route.append(route[-1].previous)
     route.reverse()
     return route
 
@@ -16,5 +16,5 @@ def DFS(start, end, bonus_points = None):
             return route, len(route)
         for neighbor in node.neighbors:
             if neighbor not in stack and not neighbor.isVisited:
-                neighbor.previous.append(node)
+                neighbor.previous = node
                 stack.append(neighbor)
