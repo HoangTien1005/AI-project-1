@@ -10,6 +10,6 @@ def DFS(start, end, bonus_points = None):
             route = get_route(start, end)
             return route, len(route)
         for neighbor in node.neighbors:
-            if neighbor not in stack and not neighbor.isVisited:
+            if not neighbor.isVisited:
                 neighbor.previous = node
                 stack.append(neighbor)
