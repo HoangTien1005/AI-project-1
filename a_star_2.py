@@ -49,9 +49,16 @@ def increasingSort(arr, end, type = 1):
         for j in range(i+1, len(arr)):
             if j < len(arr):
                 if arr[i].f > arr[j].f:
-                    swapArrElement(arr,i,j)  
+                    swapArrElement(arr,i,j)
 
-def bonus_iSort(arr, end, type = 1):
+
+
+def bonus_iSort(arr, start, end, type = 1):
+
+
+
+
+
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
             if j < len(arr):
@@ -87,8 +94,6 @@ def A_Star(start, end, bonus_points = [], type=1):
 
     else:
         cost = 0
-        for node in bonus_points:
-            cost += node.reward
         bonus_iSort(bonus_points, start, type)
         node = bonus_points.pop(0)
         node.show()

@@ -7,9 +7,9 @@ from a_star import A_Star
 from utilities import *
 
 
-bonus_points, maze = read_file('map7.txt')
+bonus_points, maze = read_file('map6.txt')
 
-graph, start, end = init(maze, bonus_points)
+graph, start, end, bonus_points = init(maze, bonus_points)
 
 
 

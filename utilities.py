@@ -81,6 +81,7 @@ def read_file(file_name: str = 'maze.txt'):
 
 
 def init(maze, bonus_points = None):
+    temp_bonus = []
     graph = []
     for i in range(len(maze)):
         row = []
@@ -101,6 +102,7 @@ def init(maze, bonus_points = None):
                 for point in bonus_points:
                     if node.isEqual(point):
                         node.reward = point.reward
+                        temp_bonus.append(node)
             row.append(node)
 
         graph.append(row)
@@ -108,7 +110,7 @@ def init(maze, bonus_points = None):
     for i in range(1, len(graph) - 1):
         for j in range(1, len(graph[0]) - 1):
             graph[i][j].addNeighbors(graph)
-    return graph, start, end
+    return graph, start, end, temp_bonus
 
 def swapArrElement(arr, pos1, pos2):
     arr[pos1], arr[pos2] = arr[pos2], arr[pos1]
