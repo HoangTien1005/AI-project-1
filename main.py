@@ -3,7 +3,8 @@ from node import Node
 from bfs import BFS
 from dfs import DFS
 from greedy import *
-from a_star import A_Star
+# from a_star import A_Star
+from a_star_2 import A_Star
 from utilities import *
 
 
