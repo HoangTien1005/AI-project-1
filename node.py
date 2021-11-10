@@ -11,7 +11,7 @@ class Node:
         self.isWall = isWall
         self.isVisited = isVisited
 
-    def addNeighbors(self, graph):
+    def add_neighbors(self, graph):
         if self.isWall:
             return
         m = len(graph)
@@ -33,5 +33,5 @@ class Node:
         for neighbor in self.neighbors:
             print(neighbor.x, neighbor.y)
 
-    def isEqual(self, anotherNode):
+    def is_equal(self, anotherNode):
         return self.x == anotherNode.x and self.y == anotherNode.y

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from node import Node
+import math
 
 
 def visualize(maze, bonus, start, end, route=None, cost=None):
@@ -65,7 +66,7 @@ def visualize(maze, bonus, start, end, route=None, cost=None):
     plt.show()
 
 
-def read_file(file_name: str = 'maze.txt'):
+def read_file(file_name: str = './mazes/1.txt'):
     f = open(file_name, 'r')
     n_bonus_points = int(next(f)[:-1])
 
@@ -80,6 +81,7 @@ def read_file(file_name: str = 'maze.txt'):
     return bonus_points, maze
 
 
+# initialize all the variables needed
 def init(maze, bonus_points = None):
     graph = []
     temp_bonus_points = []
@@ -100,7 +102,7 @@ def init(maze, bonus_points = None):
 
             elif maze[i][j] == '+':
                 for point in bonus_points:
-                    if node.isEqual(point):
+                    if node.is_equal(point):
                         node.reward = point.reward
                         temp_bonus_points.append(node)
             row.append(node)
@@ -109,8 +111,72 @@ def init(maze, bonus_points = None):
 
     for i in range(1, len(graph) - 1):
         for j in range(1, len(graph[0]) - 1):
-            graph[i][j].addNeighbors(graph)
+            graph[i][j].add_neighbors(graph)
     return graph, start, end, temp_bonus_points
 
-def swapArrElement(arr, pos1, pos2):
+
+# get the path from start to end using backtracking
+def get_route(start, end):
+    route = [end]
+    while not route[-1].is_equal(start):
+        route.append(route[-1].previous)
+    route.reverse()
+    return route
+
+# reset every node.g in graph
+def wayPaving(graph):
+    for i in range(len(graph)):
+        for j in range(len(graph[0])):
+            graph[i][j].g = 0
+            
+# reset every node.g in arr
+def reset(arr):
+    for node in arr:
+           node.g = 0
+
+def swap_arr_element(arr, pos1, pos2):
     arr[pos1], arr[pos2] = arr[pos2], arr[pos1]
+
+# Manhattan heuristic
+def manhattan(node, end):
+    h = abs(node.x - end.x) + abs(node.y - end.y)
+    return h 
+
+# Euclidean heuristic
+def euclidean(node, end):
+    h = math.sqrt((node.x - end.x)**2 + (node.y - end.y)**2)
+    return h
+
+# return the heuristic based on type
+def heuristic(node, end, type = 1):
+    if type == 1:
+        return manhattan(node, end)
+    
+    return euclidean(node, end)
+    
+# sorting based on node.f
+def increasing_sort(arr, end, type = 1):
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if j < len(arr):
+                if arr[i].f > arr[j].f:
+                    swap_arr_element(arr,i,j)  
+
+#sorting the array of bonus points (A* brute-force strategy)
+def bonus_sort_1(arr, end, type = 1):
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if j < len(arr):
+                if heuristic(arr[i], end, type) > heuristic(arr[j], end, type):
+                    swap_arr_element(arr,i,j)   
+
+
+#sorting the array of bonus points (A* nearly optimal strategy)
+def bonus_sort_2(arr,start, end, type = 1):
+    for i in range(len(arr)):
+        for j in range(i+1, len(arr)):
+            if j < len(arr):
+                score_i = heuristic(arr[i], start, type) + heuristic(arr[i], end, type) + arr[i].reward
+                score_j = heuristic(arr[j], start, type) + heuristic(arr[j], end, type) + arr[j].reward
+                if score_i > score_j:
+                    swap_arr_element(arr,i,j)   
