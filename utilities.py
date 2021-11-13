@@ -155,7 +155,7 @@ def heuristic(node, end, type = 1):
     return euclidean(node, end)
     
 # sorting based on node.f
-def increasing_sort(arr, end, type = 1):
+def increasing_sort(arr):
     for i in range(len(arr)):
         for j in range(i+1, len(arr)):
             if j < len(arr):
