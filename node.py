@@ -14,6 +14,7 @@ class Node:
     def add_neighbors(self, graph):
         if self.isWall:
             return
+            
         m = len(graph)
         n = len(graph[0])
         if self.x + 1 < m and not graph[self.x + 1][self.y].isWall:

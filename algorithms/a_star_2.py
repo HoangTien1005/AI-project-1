@@ -8,7 +8,7 @@ def A_Star_2(graph, start, end, type=1, bonus_points=[]):
         open_list.append(start)
 
         while open_list:
-            increasing_sort(open_list, end, type)
+            increasing_sort(open_list)
             node = open_list.pop(0)
 
             if node.is_equal(end):

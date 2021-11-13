@@ -5,7 +5,7 @@ def Greedy(start, end, type=1, bonus_points=[]):
     priority_queue = []
     priority_queue.append(start)
     while priority_queue:
-        increasing_sort(priority_queue, end, type)
+        increasing_sort(priority_queue)
         node = priority_queue.pop(0)
         node.isVisited = True
         if node.is_equal(end):

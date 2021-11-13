@@ -13,6 +13,7 @@ bonus_points, maze = read_file(f'./mazes/{mazes_number}.txt')
 graph, start, end, temp_bonus_points = init(maze, bonus_points)
 
 
+
 if(mazes_number in range(1, 6)):
     print('1. DFS (Depth First Search)')
     print('2. BFS (Breadth First Search)')
