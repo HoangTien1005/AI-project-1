@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from node import Node
-
+import math
 
 def visualize(maze, bonus, start, end, route=None, cost=None):
     print(f'The height of the maze: {len(maze)}')
@@ -64,7 +64,6 @@ def visualize(maze, bonus, start, end, route=None, cost=None):
     plt.yticks([])
     plt.show()
 
-
 def read_file(file_name: str = 'maze.txt'):
     f = open(file_name, 'r')
     n_bonus_points = int(next(f)[:-1])
@@ -78,7 +77,6 @@ def read_file(file_name: str = 'maze.txt'):
     maze = [list(i) for i in text.splitlines()]
     f.close()
     return bonus_points, maze
-
 
 def init(maze, bonus_points = None):
     temp_bonus = []
@@ -114,3 +112,40 @@ def init(maze, bonus_points = None):
 
 def swapArrElement(arr, pos1, pos2):
     arr[pos1], arr[pos2] = arr[pos2], arr[pos1]
+
+def getRoute(start, end):
+    route = [end]
+    while not route[-1].isEqual(start):
+        route.append(route[-1].previous)
+    route.reverse()
+    return route
+
+def wayPaving(route):
+    for node in route:
+        node.isVisited = False
+
+def Manhattan(node, end):
+    h = abs(node.x - end.x) + abs(node.y - end.y)
+    return h 
+
+def Euclidean(node, end):
+    h = math.sqrt((node.x - end.x)**2 + (node.y - end.y)**2)
+    return h
+
+def Distance(node, end, type):
+    if type == 1:
+        return abs(node.x - end.x) + abs(node.y - end.y)
+    elif type == 2:
+        return math.sqrt((node.x - end.x)**2 + (node.y - end.y)**2)
+
+def DistanceX(start, end, node, type):
+    return Distance(start, node, type) + Distance(node, end, type) + node.reward - Distance(start, end, type)
+
+def Heuristic(node, end, type = 1):
+    if type == 1:
+        node.h = Manhattan(node, end)
+    elif type == 2:
+        node.h = Euclidean(node, end)
+
+
+        

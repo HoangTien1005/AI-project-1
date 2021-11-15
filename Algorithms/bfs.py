@@ -1,10 +1,4 @@
-def getRoute(start, end):
-    route = [end]
-    while not route[-1].isEqual(start):
-        route.append(route[-1].previous)
-    route.reverse()
-    return route
-
+from utilities import getRoute
 
 def BFS(start, end, bonus_points = None):
     queue = []

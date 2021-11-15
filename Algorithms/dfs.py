@@ -1,9 +1,4 @@
-def getRoute(start, end):
-    route = [end]
-    while not route[-1].isEqual(start):
-        route.append(route[-1].previous)
-    route.reverse()
-    return route
+from utilities import getRoute
 
 def DFS(start, end, bonus_points = None):
     stack = []
@@ -15,6 +10,6 @@ def DFS(start, end, bonus_points = None):
             route = getRoute(start, node)
             return route, len(route)
         for neighbor in node.neighbors:
-            if neighbor not in stack and not neighbor.isVisited:
+            if not neighbor.isVisited:
                 neighbor.previous = node
                 stack.append(neighbor)
