@@ -1,16 +1,16 @@
 import matplotlib.pyplot as plt
 from node import Node
+import math
 
-
-def visualize(maze, bonus, start, end, route=None):
+def visualize(maze, bonus, start, end, route=None, cost=None):
     print(f'The height of the maze: {len(maze)}')
     print(f'The width of the maze: {len(maze[0])}')
 
     print(f'Starting point (x, y) = {start.x, start.y}')
     print(f'Ending point (x, y) = {end.x, end.y}')
 
-    if route:
-        print(f'Cost: {len(route)}')
+    if cost:
+        print(f'Cost: {cost}')
 
     for _, point in enumerate(bonus):
         print(
@@ -64,7 +64,6 @@ def visualize(maze, bonus, start, end, route=None):
     plt.yticks([])
     plt.show()
 
-
 def read_file(file_name: str = 'maze.txt'):
     f = open(file_name, 'r')
     n_bonus_points = int(next(f)[:-1])
@@ -79,8 +78,8 @@ def read_file(file_name: str = 'maze.txt'):
     f.close()
     return bonus_points, maze
 
-
 def init(maze, bonus_points = None):
+    temp_bonus = []
     graph = []
     for i in range(len(maze)):
         row = []
@@ -101,6 +100,7 @@ def init(maze, bonus_points = None):
                 for point in bonus_points:
                     if node.isEqual(point):
                         node.reward = point.reward
+                        temp_bonus.append(node)
             row.append(node)
 
         graph.append(row)
@@ -108,4 +108,44 @@ def init(maze, bonus_points = None):
     for i in range(1, len(graph) - 1):
         for j in range(1, len(graph[0]) - 1):
             graph[i][j].addNeighbors(graph)
-    return graph, start, end
+    return graph, start, end, temp_bonus
+
+def swapArrElement(arr, pos1, pos2):
+    arr[pos1], arr[pos2] = arr[pos2], arr[pos1]
+
+def getRoute(start, end):
+    route = [end]
+    while not route[-1].isEqual(start):
+        route.append(route[-1].previous)
+    route.reverse()
+    return route
+
+def wayPaving(route):
+    for node in route:
+        node.isVisited = False
+
+def Manhattan(node, end):
+    h = abs(node.x - end.x) + abs(node.y - end.y)
+    return h 
+
+def Euclidean(node, end):
+    h = math.sqrt((node.x - end.x)**2 + (node.y - end.y)**2)
+    return h
+
+def Distance(node, end, type):
+    if type == 1:
+        return abs(node.x - end.x) + abs(node.y - end.y)
+    elif type == 2:
+        return math.sqrt((node.x - end.x)**2 + (node.y - end.y)**2)
+
+def DistanceX(start, end, node, type):
+    return Distance(start, node, type) + Distance(node, end, type) + node.reward - Distance(start, end, type)
+
+def Heuristic(node, end, type = 1):
+    if type == 1:
+        node.h = Manhattan(node, end)
+    elif type == 2:
+        node.h = Euclidean(node, end)
+
+
+        
