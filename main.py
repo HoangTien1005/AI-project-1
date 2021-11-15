@@ -22,7 +22,7 @@ if map >= 1 and map <= 8:
     file = "./Maps/map" + str(map) + ".txt"
 else: 
     exit()
-file = "./Maps/map9.txt"
+
 bonus_points, maze = read_file(file)
 
 graph, start, end, bonus_points = init(maze, bonus_points)
